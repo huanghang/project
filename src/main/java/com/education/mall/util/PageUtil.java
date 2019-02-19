@@ -1,6 +1,8 @@
 package com.education.mall.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 分页对象
@@ -47,6 +49,7 @@ public class PageUtil {
      */
     private int next;
 
+    private Map<String, String> params;
 
     public PageUtil() {
 
@@ -180,4 +183,14 @@ public class PageUtil {
         this.next = next;
     }
 
+    public Map<String, String> getParams() {
+        if (this.params == null) {
+            params = new HashMap<>(0);
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
 }

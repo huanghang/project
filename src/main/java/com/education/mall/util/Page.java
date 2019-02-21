@@ -1,13 +1,11 @@
 package com.education.mall.util;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 分页对象
  */
-public class PageUtil {
+public class Page<T> {
 
     /**
      * 页起始位置
@@ -22,7 +20,7 @@ public class PageUtil {
     /**
      * 当前页
      */
-    private int currPage;
+    private int pageNum;
 
     /**
      * 记录总数
@@ -37,7 +35,7 @@ public class PageUtil {
     /**
      * 页包含的数据对象集合
      */
-    private List<?> list;
+    private List<T> list;
 
     /**
      * 上一页
@@ -49,9 +47,8 @@ public class PageUtil {
      */
     private int next;
 
-    private Map<String, String> params;
 
-    public PageUtil() {
+    public Page() {
 
     }
 
@@ -59,16 +56,16 @@ public class PageUtil {
      * 构造分页对象(传入未分页的list)
      *
      * @param pageSize 页大小
-     * @param page     页数
+     * @param pageNum  页数
      * @param list     待分页记录集合
      */
-    public PageUtil(int pageSize, int page, List<?> list) {
+    public Page(int pageSize, int pageNum, List<T> list) {
         this.start = getStart();
         this.pageSize = pageSize;
-        this.currPage = page;
+        this.pageNum = pageNum;
         this.total = list.size();
         this.totalPage = getTotalPage();
-        this.list = generateList(pageSize, page, list);
+        this.list = generateList(pageSize, pageNum, list);
         this.pre = getPre();
         this.next = getNext();
     }
@@ -77,14 +74,14 @@ public class PageUtil {
      * 构造分页对象(传入已分页的list)
      *
      * @param pageSize 页大小
-     * @param page     页数
+     * @param pageNum  页数
      * @param total    总记录数
      * @param list     已分页记录集合
      */
-    public PageUtil(int pageSize, int page, int total, List<?> list) {
+    public Page(int pageSize, int pageNum, int total, List<T> list) {
         this.start = getStart();
         this.pageSize = pageSize;
-        this.currPage = page;
+        this.pageNum = pageNum;
         this.total = total;
         this.totalPage = getTotalPage();
         this.list = list;
@@ -95,7 +92,7 @@ public class PageUtil {
     /**
      * 根据传入参数构造page的list集合
      */
-    private List<?> generateList(int pageSize, int curr, List<?> list) {
+    private List<T> generateList(int pageSize, int pageNum, List<T> list) {
         if (list == null || list.isEmpty()) {
             return null;
         }
@@ -111,7 +108,7 @@ public class PageUtil {
     }
 
     public int getStart() {
-        return (this.currPage - 1) * this.pageSize;
+        return (this.pageNum - 1) * this.pageSize;
     }
 
     public void setStart(int start) {
@@ -126,12 +123,12 @@ public class PageUtil {
         this.pageSize = pageSize;
     }
 
-    public int getCurrPage() {
-        return currPage;
+    public int getPageNum() {
+        return pageNum;
     }
 
-    public void setCurrPage(int currPage) {
-        this.currPage = currPage;
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
     }
 
     public int getTotal() {
@@ -151,28 +148,28 @@ public class PageUtil {
         this.totalPage = totalPage;
     }
 
-    public List<?> getList() {
+    public List<T> getList() {
         return list;
     }
 
-    public void setList(List<?> list) {
+    public void setList(List<T> list) {
         this.list = list;
     }
 
     public int getPre() {
-        return (hasPre()) ? this.currPage - 1 : 1;
+        return (hasPre()) ? this.pageNum - 1 : 1;
     }
 
     public int getNext() {
-        return (hasNext()) ? this.currPage + 1 : this.totalPage;
+        return (hasNext()) ? this.pageNum + 1 : this.totalPage;
     }
 
     public boolean hasPre() {
-        return this.currPage > 1;
+        return this.pageNum > 1;
     }
 
     public boolean hasNext() {
-        return this.currPage < this.totalPage;
+        return this.pageNum < this.totalPage;
     }
 
     public void setPre(int pre) {
@@ -183,14 +180,17 @@ public class PageUtil {
         this.next = next;
     }
 
-    public Map<String, String> getParams() {
-        if (this.params == null) {
-            params = new HashMap<>(0);
-        }
-        return params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
+    @Override
+    public String toString() {
+        return "Page{" +
+                "start=" + start +
+                ", pageSize=" + pageSize +
+                ", pageNum=" + pageNum +
+                ", total=" + total +
+                ", totalPage=" + totalPage +
+                ", list=" + list +
+                ", pre=" + pre +
+                ", next=" + next +
+                '}';
     }
 }
